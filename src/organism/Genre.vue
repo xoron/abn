@@ -1,12 +1,13 @@
 <template>
-  <div>
+  <div data-test="genre">
     <h3>{{ genre }}</h3>
     <Carousel
-      :itemsToShow="3.95"
+      :itemsToShow="5"
+      :wrapAround="true"
       :transition="500"
       class="divide-y divide-gray-200"
     >
-      <Slide v-for="slide in 10" :key="slide">
+      <Slide v-for="slide in list" :key="slide">
         <div class="carousel__item">
           <Show />
         </div>
@@ -37,6 +38,7 @@ export default defineComponent({
   },
   props: {
     genre: String,
+    list: Array,
   },
 });
 </script>
