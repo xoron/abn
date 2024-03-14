@@ -56,3 +56,4 @@ css
 resources: 
 https://medium.com/@gersonjunior12/vue-js-3-webpack-5-minimal-configuration-35e535f399fd
 https://router.vuejs.org/guide/
+https://stackoverflow.com/questions/72428323/jest-referenceerror-vue-is-not-defined

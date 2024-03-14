@@ -2,13 +2,20 @@
   "scripts": {
     "dev": "webpack serve --config webpack/webpack.dev.js",
     "build": "webpack --config webpack/webpack.prod.js",
-    "lint": "eslint --ext .js,.vue src"
+    "lint": "eslint --ext .js,.vue src",
+    "test": "jest"
   },
   "devDependencies": {
+    "@babel/core": "^7.24.0",
+    "@babel/preset-env": "^7.24.0",
+    "@vue/test-utils": "^2.4.5",
+    "@vue/vue3-jest": "^29.2.6",
+    "babel-jest": "^29.7.0",
     "css-loader": "^6.10.0",
     "eslint": "^8.57.0",
     "eslint-plugin-vue": "^9.23.0",
     "html-webpack-plugin": "^5.6.0",
+    "jest-environment-jsdom": "^29.7.0",
     "tailwindcss": "^3.4.1",
     "vue": "^3.4.21",
     "vue-loader": "^17.4.2",
@@ -25,5 +32,21 @@
     "vue-router": "^4.3.0",
     "vue-snap": "^1.0.0-alpha.5",
     "vue3-carousel": "^0.3.1"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "vue"
+    ],
+    "transform": {
+      "^.+\\.js$": "babel-jest",
+      ".*\\.(vue)$": "@vue/vue3-jest"
+    },
+    "testEnvironment": "jest-environment-jsdom",
+    "moduleNameMapper": {
+      "^@vue/test-utils": "<rootDir>/node_modules/@vue/test-utils/dist/vue-test-utils.cjs.js",
+      "\\.(css|less|sass|scss)$": "<rootDir>/mocks/styleMock.js"
+    }
   }
 }
