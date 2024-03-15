@@ -1,77 +1,129 @@
 <template>
-  <div data-test="shows">
+  <Toolbar class="toolbar">
 
-    <h2>Shows</h2>
-    <!-- <router-view /> -->
-  
-    <!-- Access URL params -->
-    <!-- <div>aaas{{ $route.params.test }}</div> -->
-    <!-- <button
-      @click="fetchShows"
-      data-test="fetch-shows-button"
-    >Fetch shows</button> -->
+    <template #start>
+      <InputText
+        placeholder="Search ABN shows"
+        :value="search"
+        @input="search = $event.target.value"
+      />
+    </template>
 
-    <button
-      @click="fetchNextPage"
+    <template #end>
+      <Button @click="fetchNextPage" data-test="previous-page-button">
+        Load more (TV shows: {{ cachedData.cache.length }})
+      </Button>
+      <Button
+      @click="$router.push('/search')"
       data-test="previous-page-button"
-    >Load more (cached: {{ cachedData.cache.length }})</button>
-    <select>
-      <option value="">Select Genre</option>
-      <option v-for="genre in genres" :key="genre" :value="genre">{{ genre }}</option>
-    </select>
-
-    <select>
-      <option value="">Select Rating</option>
-      <option v-for="rating in ratings" :key="rating" :value="rating">{{ rating }}</option>
-    </select>
-    <Genre
+      >
+        🔎
+      </Button>
+    </template>
+  </Toolbar>
+  <div class="container" data-test="shows">
+    <Category
       v-for="genre in genres"
       :key="genre"
-      :genre="genre"
-      :list="cachedData.cache.filter(s => s.genres.includes(genre))"
-      />
+      :category="genre"
+      :list="
+        cachedData.cache
+          .filter(
+            (s) =>
+              s.genres.includes(genre) &&
+              s.name.toLowerCase().includes(search.toLowerCase()))
+          .sort((a, b) => a.rating?.average - b.rating?.average)
+      "
+    />
   </div>
 </template>
 
 <script>
-import { defineComponent, onMounted, ref, reactive, watch } from "vue";
-import Genre from "./Genre.vue";
+import {
+  defineComponent,
+  onMounted,
+  ref,
+  reactive,
+  watch,
+  computed,
+} from "vue";
+import Category from "./Category.vue";
+
+// debounce function
+const debounce = (func, wait) => {
+  let timeout;
+  return function (...args) {
+    const context = this;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(context, args), wait);
+  };
+};
 
 export default defineComponent({
-  name: "App",
+  name: "ShowsView",
   components: {
-    Genre,
+    Category,
   },
   setup() {
+    const search = ref("");
     const genres = ref([]);
-    const ratings = ref([]);
+    // const ratings = ref([]);
     const cachedData = reactive({
       cache: [],
-    })
+    });
+
+    // const options = reactive([
+    //   {
+    //     label: `Load more (cached: ${cachedData.cache.length})`,
+    //     command: () => fetchNextPage(),
+    //   },
+    //   {
+    //     label: "Delete",
+    //   },
+    // ]);
 
     watch(cachedData, (newValue, oldValue) => {
-      console.log('cachedData changed', newValue, oldValue);
+      console.log("cachedData changed", newValue, oldValue);
       genres.value = newValue.cache
         .map((show) => show.genres)
         .flat()
         .filter((value, index, self) => self.indexOf(value) === index)
         .sort();
-      ratings.value = newValue.cache
-        .map((show) => show.rating?.average)
-        .filter((value, index, self) => self.indexOf(value) === index)
-        .sort()
-        .reverse();
+      // ratings.value = newValue.cache
+      //   .map((show) => show.rating?.average)
+      //   .filter((value, index, self) => self.indexOf(value) === index)
+      //   .sort()
+      //   .reverse();
     });
 
     const pageNumber = ref(1);
 
+    const searchShows = async (search) => {
+      const response = await fetch(
+        `https://api.tvmaze.com/shows?q=${search}`
+      ).catch((error) => {
+        console.error("Error fetching shows", error);
+      });
+
+      const newData = await response.json();
+      cachedData.cache = [...cachedData.cache, ...newData];
+    };
+
+    const deBouncedSearchShows = debounce(searchShows, 500);
+
+    watch(search, (newValue, oldValue) => {
+      console.log("search changed", newValue, oldValue);
+      // deBouncedSearchShows(newValue);
+    });
+
     const fetchShows = async () => {
-      const response = await fetch(`https://api.tvmaze.com/shows?page=${pageNumber.value}`)
-        .catch((error) => {
-          console.error("Error fetching shows", error);
-        });
-        const newData = await response.json();
-        cachedData.cache = [...cachedData.cache, ...newData];
+      const response = await fetch(
+        `https://api.tvmaze.com/shows?page=${pageNumber.value}`
+      ).catch((error) => {
+        console.error("Error fetching shows", error);
+      });
+      const newData = await response.json();
+      cachedData.cache = [...cachedData.cache, ...newData];
     };
 
     const fetchNextPage = () => {
@@ -80,19 +132,39 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      console.log('Component is mounted!');
+      console.log("Component is mounted!");
       fetchShows();
     });
 
-    return { pageNumber, genres, ratings, cachedData, fetchShows, fetchNextPage };
-  }
+    return {
+      pageNumber,
+      genres,
+      // ratings,
+      cachedData,
+      fetchShows,
+      fetchNextPage,
+      // options,
+      search,
+    };
+  },
 });
 </script>
 
 <style scoped>
-h1 {
-  width: 100%;
-  text-align: center;
-  margin-top: 10px;
+.toolbar {
+  position: fixed;
+  z-index: 1;
+}
+
+.container {
+  padding-top: 60px;
+}
+
+button {
+  margin-right: 10px;
+}
+
+img {
+  ming-height: 100px;
 }
 </style>
