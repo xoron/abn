@@ -1,5 +1,7 @@
 # abn
 
+deployment: https://xoron.github.io/abn/#/
+
 Frontend developer assignment
 Introduction
 The purpose of this assignment is to evaluate the candidate’s familiarity with frontend technologies,
@@ -37,10 +39,9 @@ todo:
 - [x] add router - remesate variables.
 - [] add a lot of tests
 - [] testing 
-- [] add typescript
 - [] state management- maybe not needed 
 - skeletons loading
-- handlle errors egantly
+- handle errors egantly
 handleloading skeletons
 implement a try again button
 
@@ -49,7 +50,13 @@ implement a try again button
 0- or styled component
 or a styling library
 
-css 
+
+- make fetch separated,
+
+
+todo:
+
+- add bebounce to search function
 
 
 
@@ -57,3 +64,7 @@ resources:
 https://medium.com/@gersonjunior12/vue-js-3-webpack-5-minimal-configuration-35e535f399fd
 https://router.vuejs.org/guide/
 https://stackoverflow.com/questions/72428323/jest-referenceerror-vue-is-not-defined
+https://primevue.org/
+
+note:
+- show search api is not paginated, so we can only get 10 results at a time.

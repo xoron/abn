@@ -2,3 +2,11 @@ body {
     background-color: #004D41;
     color: white;
 }
+
+.absolute {
+    position: absolute;
+}
+
+.relative {
+    position: relative;
+}
