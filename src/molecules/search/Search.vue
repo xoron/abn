@@ -93,17 +93,15 @@ export default defineComponent({
         }`
       );
       searchResults.value = await response.json();
-      console.log("searchResults", searchResults.value);
     };
 
     onMounted(() => {
       search();
     });
 
-    watch(searchQuery, async (newValue, oldValue) => {
-      console.log("searchQuery changed", newValue, oldValue);
+    watch(searchQuery, async (newValue) => {
       const response = await fetch(
-        `https://api.tvmaze.com/search/shows?q=${searchQuery.value}`
+        `https://api.tvmaze.com/search/shows?q=${newValue}`
       ).catch((error) => {
         console.warn("Error fetching shows", error);
       })
