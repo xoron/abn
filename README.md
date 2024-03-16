@@ -68,3 +68,4 @@ https://primevue.org/
 
 note:
 - show search api is not paginated, so we can only get 10 results at a time.
+- the respobsive options for the carousel are reletive to the browser width. when using it with the search dialog, the responsive behaviour is not good.

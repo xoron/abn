@@ -1,37 +1,44 @@
 <template>
   <Toolbar class="toolbar">
-
     <template #start>
       <InputText
         placeholder="Search ABN shows"
         :value="search"
         @input="search = $event.target.value"
       />
-    </template>
-
-    <template #end>
-      <Button @click="fetchNextPage" data-test="previous-page-button">
-        Load more (TV shows: {{ cachedData.cache.length }})
-      </Button>
       <Button
-      @click="$router.push('/search')"
-      data-test="previous-page-button"
+        data-test="previous-page-button"
+        @click="$router.push(`/search/${search}`)"
       >
         🔎
       </Button>
     </template>
+
+    <template #end>
+      <Button
+data-test="previous-page-button"
+@click="fetchNextPage"
+>
+        Cache more (TV shows: {{ cachedData.cache.length }})
+      </Button>
+    </template>
   </Toolbar>
-  <div class="container" data-test="shows">
+  <div
+class="container"
+data-test="shows"
+>
     <Category
       v-for="genre in genres"
       :key="genre"
+      data-test="genre"
       :category="genre"
       :list="
         cachedData.cache
           .filter(
             (s) =>
               s.genres.includes(genre) &&
-              s.name.toLowerCase().includes(search.toLowerCase()))
+              s.name.toLowerCase().includes(search.toLowerCase()) 
+          )
           .sort((a, b) => a.rating?.average - b.rating?.average)
       "
     />
@@ -45,19 +52,8 @@ import {
   ref,
   reactive,
   watch,
-  computed,
 } from "vue";
-import Category from "./Category.vue";
-
-// debounce function
-const debounce = (func, wait) => {
-  let timeout;
-  return function (...args) {
-    const context = this;
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(context, args), wait);
-  };
-};
+import Category from "../../molecules/categories/Category.vue";
 
 export default defineComponent({
   name: "ShowsView",
@@ -67,20 +63,9 @@ export default defineComponent({
   setup() {
     const search = ref("");
     const genres = ref([]);
-    // const ratings = ref([]);
     const cachedData = reactive({
       cache: [],
     });
-
-    // const options = reactive([
-    //   {
-    //     label: `Load more (cached: ${cachedData.cache.length})`,
-    //     command: () => fetchNextPage(),
-    //   },
-    //   {
-    //     label: "Delete",
-    //   },
-    // ]);
 
     watch(cachedData, (newValue, oldValue) => {
       console.log("cachedData changed", newValue, oldValue);
@@ -89,32 +74,25 @@ export default defineComponent({
         .flat()
         .filter((value, index, self) => self.indexOf(value) === index)
         .sort();
-      // ratings.value = newValue.cache
-      //   .map((show) => show.rating?.average)
-      //   .filter((value, index, self) => self.indexOf(value) === index)
-      //   .sort()
-      //   .reverse();
     });
 
     const pageNumber = ref(1);
 
-    const searchShows = async (search) => {
-      const response = await fetch(
-        `https://api.tvmaze.com/shows?q=${search}`
-      ).catch((error) => {
-        console.error("Error fetching shows", error);
-      });
+    // const searchShows = async (search) => {
+    //   const response = await fetch(
+    //     `https://api.tvmaze.com/shows?q=${search}`
+    //   ).catch((error) => {
+    //     console.error("Error fetching shows", error);
+    //   });
 
-      const newData = await response.json();
-      cachedData.cache = [...cachedData.cache, ...newData];
-    };
+    //   const newData = await response.json();
+    //   cachedData.cache = [...cachedData.cache, ...newData];
+    // };
 
-    const deBouncedSearchShows = debounce(searchShows, 500);
-
-    watch(search, (newValue, oldValue) => {
-      console.log("search changed", newValue, oldValue);
-      // deBouncedSearchShows(newValue);
-    });
+    // watch(search, (newValue, oldValue) => {
+    //   console.log("search changed", newValue, oldValue);
+    //   searchShows(newValue);
+    // });
 
     const fetchShows = async () => {
       const response = await fetch(
@@ -132,18 +110,15 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      console.log("Component is mounted!");
       fetchShows();
     });
 
     return {
       pageNumber,
       genres,
-      // ratings,
       cachedData,
       fetchShows,
       fetchNextPage,
-      // options,
       search,
     };
   },
@@ -153,6 +128,7 @@ export default defineComponent({
 <style scoped>
 .toolbar {
   position: fixed;
+  width: 98%;
   z-index: 1;
 }
 
@@ -160,11 +136,7 @@ export default defineComponent({
   padding-top: 60px;
 }
 
-button {
+input {
   margin-right: 10px;
-}
-
-img {
-  ming-height: 100px;
 }
 </style>

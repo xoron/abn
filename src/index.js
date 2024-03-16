@@ -3,7 +3,7 @@ import './index.css';
 import 'primevue/resources/primevue.min.css'
 import 'primevue/resources/themes/aura-light-green/theme.css'
 import { createRouter, createWebHashHistory } from 'vue-router';
-import AppVue from './App.vue';
+import AppVue from './organisms/app/App.vue';
 import PrimeVue from 'primevue/config';
 import Button from "primevue/button"
 import Toolbar from "primevue/toolbar"
@@ -11,7 +11,6 @@ import InputIcon from "primevue/inputicon"
 import InputText from "primevue/inputtext"
 import Carousel from 'primevue/carousel';
 import Tag from 'primevue/tag';
-import SplitButton from 'primevue/splitbutton';
 import Dialog from 'primevue/dialog';
 
 const routes = [
@@ -37,6 +36,5 @@ app.component('InputIcon', InputIcon);
 app.component('InputText', InputText);
 app.component('Carousel', Carousel);
 app.component('Tag', Tag);
-app.component('SplitButton', SplitButton);
 
 app.mount('#app'); 
