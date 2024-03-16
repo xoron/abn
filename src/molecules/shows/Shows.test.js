@@ -1,6 +1,5 @@
 import { mount } from '@vue/test-utils';
-import Shows from '../Shows.vue';
-// import Genre from '../Genre.vue';
+import Shows from './Shows.vue';
 
 function flushPromises() {
     return new Promise((resolve) => setTimeout(resolve));
@@ -10,8 +9,8 @@ function flushPromises() {
 global.fetch = jest.fn(() =>
   Promise.resolve({
     json: () => Promise.resolve([
-      { genres: ['Comedy'], rating: { average: 5.0 } }, 
-      { genres: ['Drama', 'Comedy'], rating: { average: 5.0 } }
+      { name: 'aaa', genres: ['Comedy'], rating: { average: 5.0 } }, 
+      { name: 'bbb', genres: ['Drama', 'Comedy'], rating: { average: 5.0 } }
     ])
   })
 );
@@ -28,7 +27,8 @@ describe('Shows', () => {
 
     expect(fetch).toHaveBeenCalledTimes(1);
     // Correctly targeting the genres array inside the component's instance.
-    expect(wrapper.vm.shows.genres).toEqual(expect.arrayContaining(['Comedy', 'Drama']));
+    console.log(wrapper.vm.genres);
+    expect(wrapper.vm.genres).toEqual(expect.arrayContaining(['Comedy', 'Drama']));
   });
 
   it('renders a Genre component for each unique genre', async () => {

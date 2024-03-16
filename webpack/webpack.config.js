@@ -20,7 +20,7 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             title: 'ABN - TV Shows',
-            template: path.resolve(__src, 'templates', 'index.html'),
+            template: path.resolve(__base, 'webpack', 'templates', 'index.html'),
         }),
         new VueLoaderPlugin()
     ],
