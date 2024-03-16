@@ -7,16 +7,19 @@
                 class="w-full border-round"
                 width="130"
                 loading="lazy"
+                data-testid="show-image"
             />
             <Tag
                 :value="show.name"
                 class="absolute"
                 style="left: 5px; top: 5px"
+                data-testid="show-name"
             />
             <Tag
                 :value="show.rating?.average ? `⭐ ${show.rating.average}` : 'unrated'"
                 class="absolute"
                 style="bottom: 5px; left: 5px"
+                data-testid="show-rating"
             />
         </div>
     </RenderVisible>

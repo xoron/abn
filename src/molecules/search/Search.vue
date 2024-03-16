@@ -19,6 +19,7 @@
           <div class="mb-3">
             <div class="relative mx-auto">
               <Button
+                data-test="show-button"
                 @click="
                   async () => {
                     await $router.push(`/search/${searchQuery}`);
@@ -103,7 +104,9 @@ export default defineComponent({
       console.log("searchQuery changed", newValue, oldValue);
       const response = await fetch(
         `https://api.tvmaze.com/search/shows?q=${searchQuery.value}`
-      );
+      ).catch((error) => {
+        console.warn("Error fetching shows", error);
+      })
       searchResults.value = await response.json();
     });
 

@@ -7,9 +7,7 @@
 
       <div class="show-details">
         <h1>{{ show?.name }}</h1>
-        <p v-if="show?.rating?.average">
-Rating: {{ show?.rating?.average }}
-</p>
+        <p v-if="show?.rating?.average">Rating: {{ show?.rating?.average }}</p>
         <!-- Could make this safer by sanitizing the html here but the api comes with markup -->
         <p v-html="show?.summary"></p>
       </div>
@@ -45,9 +43,9 @@ export default defineComponent({
       const response = await fetch(
         `https://api.tvmaze.com/shows/${show.value.id}`
       ).catch((error) => {
-        console.error("Error fetching show", error);
+        console.warn("Error fetching show", error);
       });
-      show.value = await response.json();
+      show.value = response ? await response?.json() : show.value;
     });
     return { show };
   },
