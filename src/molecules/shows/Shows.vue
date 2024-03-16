@@ -37,7 +37,7 @@ data-test="shows"
           .filter(
             (s) =>
               s.genres.includes(genre) &&
-              s.name.toLowerCase().includes(search.toLowerCase()) 
+              s.name.toLowerCase().includes(search.toLowerCase())
           )
           .sort((a, b) => a.rating?.average - b.rating?.average)
       "
@@ -46,13 +46,7 @@ data-test="shows"
 </template>
 
 <script>
-import {
-  defineComponent,
-  onMounted,
-  ref,
-  reactive,
-  watch,
-} from "vue";
+import { defineComponent, onMounted, ref, reactive, computed } from "vue";
 import Category from "../../molecules/categories/Category.vue";
 
 export default defineComponent({
@@ -62,14 +56,12 @@ export default defineComponent({
   },
   setup() {
     const search = ref("");
-    const genres = ref([]);
     const cachedData = reactive({
       cache: [],
     });
 
-    watch(cachedData, (newValue, oldValue) => {
-      console.log("cachedData changed", newValue, oldValue);
-      genres.value = newValue.cache
+    const genres = computed(() => {
+      return cachedData.cache
         .map((show) => show.genres)
         .flat()
         .filter((value, index, self) => self.indexOf(value) === index)
@@ -90,7 +82,6 @@ export default defineComponent({
     // };
 
     // watch(search, (newValue, oldValue) => {
-    //   console.log("search changed", newValue, oldValue);
     //   searchShows(newValue);
     // });
 

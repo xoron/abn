@@ -23,7 +23,6 @@ describe('Shows', () => {
 
     expect(fetch).toHaveBeenCalledTimes(1);
     // Correctly targeting the genres array inside the component's instance.
-    console.log(wrapper.vm.genres);
     expect(wrapper.vm.genres).toEqual(expect.arrayContaining(['Comedy', 'Drama']));
   });
 

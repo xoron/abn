@@ -37,27 +37,26 @@ todo:
 - [x] add webpack
 - [x] add linting
 - [x] add router - remesate variables.
-- [] add a lot of tests
-- [] testing 
-- [] state management- maybe not needed 
-- skeletons loading
-- handle errors egantly
-handleloading skeletons
-implement a try again button
-
-- [] - prime vue
-- tailwin
-0- or styled component
-or a styling library
+- [x] testing 
+- [x] state management- maybe not needed 
+- [x] skeletons loading
+- [x] handle errors egantly
+- [x] implement a try again button
+- [x] prime vue
 
 
-- make fetch separated,
+needed fixes:
+- unit test assetion of html elements is not working
+- code coverage is not clear for vue components
 
 
-todo:
+improvements:
 
 - add bebounce to search function
-
+- break up components curther in to the atomic design pattern
+- add more unit tests
+- more code coverage
+- sanitize html when using v-html
 
 
 resources: 
@@ -68,4 +67,5 @@ https://primevue.org/
 
 note:
 - show search api is not paginated, so we can only get 10 results at a time.
-- the respobsive options for the carousel are reletive to the browser width. when using it with the search dialog, the responsive behaviour is not good.
+- the responsive options for the carousel are reletive to the browser width. when using it with the search dialog, the responsive behaviour is not good.
+- the pagination from the api is not idea for the purpose of the function of the requirements and so i used some creativity and decied to create cacheing functionality.

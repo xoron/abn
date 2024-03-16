@@ -7,7 +7,9 @@
 
       <div class="show-details">
         <h1>{{ show?.name }}</h1>
-        <p v-if="show?.rating?.average">Rating: {{ show?.rating?.average }}</p>
+        <p v-if="show?.rating?.average">
+Rating: {{ show?.rating?.average }}
+</p>
         <!-- Could make this safer by sanitizing the html here but the api comes with markup -->
         <p v-html="show?.summary"></p>
       </div>

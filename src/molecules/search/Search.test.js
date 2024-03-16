@@ -84,8 +84,6 @@ describe("SearchView", () => {
 
     await flushPromises(); // Wait for fetch and Vue updates
 
-    console.log(wrapper.html());
-
     // Ensure search results are rendered
     expect(wrapper.findAll('[data-test="show-button"]').length).toBeGreaterThan(0);
 
