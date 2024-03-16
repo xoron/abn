@@ -13,7 +13,7 @@ import Carousel from 'primevue/carousel';
 import Tag from 'primevue/tag';
 import Dialog from 'primevue/dialog';
 
-const routes = [
+export const routes = [
   { path: '/', component: AppVue },
   { path: '/genres', component: AppVue },
   { path: '/ratings', component: AppVue },

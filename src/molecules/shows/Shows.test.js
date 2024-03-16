@@ -1,9 +1,5 @@
-import { mount } from '@vue/test-utils';
+import { mount, flushPromises } from '@vue/test-utils';
 import Shows from './Shows.vue';
-
-function flushPromises() {
-    return new Promise((resolve) => setTimeout(resolve));
-}
 
 // Mock fetch global
 global.fetch = jest.fn(() =>
