@@ -16,8 +16,11 @@
         </Button>
       </form>
     </template>
-  </Toolbar>
-  <div class="container" data-test="shows">
+  </Toolbar>  
+  <div
+    class="container"
+    data-test="shows"
+  >
     <Category
       v-for="genre in genres"
       :key="genre"

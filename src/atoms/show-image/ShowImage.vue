@@ -5,7 +5,6 @@
                 :src="show.image?.medium"
                 :alt="show.name"
                 class="w-full border-round"
-                width="130"
                 loading="lazy"
                 data-testid="show-image"
             />
@@ -46,6 +45,13 @@ export default {
 .container {
     height: 182px;
     width: 130px;
+}
+.absolute {
+    position: absolute;
+}
+
+.relative {
+    position: relative;
 }
 img {
     height: 100%;

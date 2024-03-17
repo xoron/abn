@@ -4,7 +4,7 @@ import RenderVisible from '../render-visible/RenderVisible.vue';
 
 jest.mock('../render-visible/RenderVisible.vue', () => ({
   name: 'RenderVisible',
-  template: '<div><slot /></div>', // Mocks RenderVisible to simply render its default slot content
+  template: '<div><slot /></div>',
 }));
 
 describe('ShowImage', () => {

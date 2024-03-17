@@ -12,7 +12,7 @@ global.fetch = jest.fn(() =>
     ])
   })
 );
-
+// TODO: fix how to mock the store
 xdescribe('Shows', () => {
   let testingPinia;
   beforeEach(() => {
@@ -47,7 +47,7 @@ xdescribe('Shows', () => {
         { name: 'aaa', genres: ['Comedy'], rating: { average: 5.0 } },
         { name: 'bbb', genres: ['Drama', 'Comedy'], rating: { average: 5.0 } }
       ],
-      genres: ['Comedy', 'Drama'] // This assumes your store calculates genres based on the cache
+      genres: ['Comedy', 'Drama']
     });
     const wrapper = mount(ShowsView, {
       global: {
@@ -57,13 +57,10 @@ xdescribe('Shows', () => {
       },
     });
 
-    // Wait for the fetch operation and Vue updates to complete.
     await flushPromises();
     console.log(wrapper.vm.genres);
-    // next tick
     await wrapper.vm.$nextTick();
     console.log(wrapper.vm.genres);
-    // Check if a Category component is rendered for each unique genre
     console.log(wrapper.html());
 
     const genreComponents = wrapper.findAll('[data-test="genre"]');
