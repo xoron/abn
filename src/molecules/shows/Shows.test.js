@@ -12,8 +12,8 @@ global.fetch = jest.fn(() =>
     ])
   })
 );
-// TODO: fix how to mock the store
-xdescribe('Shows', () => {
+
+describe('Shows', () => {
   let testingPinia;
   beforeEach(() => {
     fetch.mockClear();
@@ -22,15 +22,22 @@ xdescribe('Shows', () => {
       stubActions: false
     });
 
-    
+    const showsStore = useShowsStore();
+    showsStore.$reset();
+    // Directly manipulate the store's state for testing purposes
+    showsStore.$patch({
+      cache: [
+        { name: 'aaa', genres: ['Comedy'], rating: { average: 5.0 } },
+        { name: 'bbb', genres: ['Drama', 'Comedy'], rating: { average: 5.0 } }
+      ],
+      genres: ['Comedy', 'Drama']
+    });
   });
 
   it('fetches shows and extracts unique genres on mount', async () => {
     const wrapper = mount(ShowsView, {
       global: {
-        plugins: [createTestingPinia({
-          createSpy: jest.fn,
-        })],
+        plugins: [testingPinia],
       },
     });
     await flushPromises();
@@ -40,28 +47,13 @@ xdescribe('Shows', () => {
   });
 
   it('renders a Category component for each unique genre', async () => {
-    const showsStore = useShowsStore();
-    // Directly manipulate the store's state for testing purposes
-    showsStore.$patch({
-      cache: [
-        { name: 'aaa', genres: ['Comedy'], rating: { average: 5.0 } },
-        { name: 'bbb', genres: ['Drama', 'Comedy'], rating: { average: 5.0 } }
-      ],
-      genres: ['Comedy', 'Drama']
-    });
     const wrapper = mount(ShowsView, {
       global: {
-        plugins: [createTestingPinia({
-          createSpy: jest.fn,
-        })],
+        plugins: [testingPinia],
       },
     });
 
     await flushPromises();
-    console.log(wrapper.vm.genres);
-    await wrapper.vm.$nextTick();
-    console.log(wrapper.vm.genres);
-    console.log(wrapper.html());
 
     const genreComponents = wrapper.findAll('[data-test="genre"]');
     expect(genreComponents).toHaveLength(2); // Because there are 2 unique genres in the mock response.
