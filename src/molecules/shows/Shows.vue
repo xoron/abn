@@ -81,6 +81,10 @@ export default defineComponent({
   padding-top: 60px;
 }
 
+form {
+  margin: 0;
+}
+
 input {
   margin-right: 10px;
 }

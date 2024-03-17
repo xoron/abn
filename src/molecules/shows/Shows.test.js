@@ -19,7 +19,7 @@ xdescribe('Shows', () => {
     fetch.mockClear();
     testingPinia = createTestingPinia({
       createSpy: jest.fn,
-      stubActions: false // Allows for the actual implementation of actions to be used
+      stubActions: false
     });
 
     
