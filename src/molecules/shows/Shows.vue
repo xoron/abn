@@ -1,52 +1,36 @@
 <template>
   <Toolbar class="toolbar">
-    <template #start>
-      <InputText
-        placeholder="Search ABN shows"
-        :value="search"
-        @input="search = $event.target.value"
-      />
-      <Button
-        data-test="previous-page-button"
-        @click="$router.push(`/search/${search}`)"
-      >
-        🔎
-      </Button>
-    </template>
-
     <template #end>
-      <Button
-data-test="previous-page-button"
-@click="fetchNextPage"
->
-        Cache more (TV shows: {{ cachedData.cache.length }})
-      </Button>
+      <form @submit.prevent>
+        <InputText
+          placeholder="Search ABN shows"
+          :value="search"
+          @input="search = $event.target.value"
+        />
+        <Button
+          data-test="previous-page-button"
+          type="submit"
+          @click="$router.push(`/search/${search}`)"
+        >
+          🔎
+        </Button>
+      </form>
     </template>
   </Toolbar>
-  <div
-class="container"
-data-test="shows"
->
+  <div class="container" data-test="shows">
     <Category
       v-for="genre in genres"
       :key="genre"
       data-test="genre"
       :category="genre"
-      :list="
-        cachedData.cache
-          .filter(
-            (s) =>
-              s.genres.includes(genre) &&
-              s.name.toLowerCase().includes(search.toLowerCase())
-          )
-          .sort((a, b) => a.rating?.average - b.rating?.average)
-      "
+      :list="getSearchFilteredList(genre)"
     />
   </div>
 </template>
 
 <script>
-import { defineComponent, onMounted, ref, reactive, computed } from "vue";
+import { defineComponent, onMounted, ref, computed } from "vue";
+import { useShowsStore } from "../../store/store";
 import Category from "../../molecules/categories/Category.vue";
 
 export default defineComponent({
@@ -55,62 +39,32 @@ export default defineComponent({
     Category,
   },
   setup() {
+    const showsStore = useShowsStore();
     const search = ref("");
-    const cachedData = reactive({
-      cache: [],
-    });
-
-    const genres = computed(() => {
-      return cachedData.cache
-        .map((show) => show.genres)
-        .flat()
-        .filter((value, index, self) => self.indexOf(value) === index)
-        .sort();
-    });
-
-    const pageNumber = ref(1);
-
-    // const searchShows = async (search) => {
-    //   const response = await fetch(
-    //     `https://api.tvmaze.com/shows?q=${search}`
-    //   ).catch((error) => {
-    //     console.error("Error fetching shows", error);
-    //   });
-
-    //   const newData = await response.json();
-    //   cachedData.cache = [...cachedData.cache, ...newData];
-    // };
-
-    // watch(search, (newValue, oldValue) => {
-    //   searchShows(newValue);
-    // });
-
-    const fetchShows = async () => {
-      const response = await fetch(
-        `https://api.tvmaze.com/shows?page=${pageNumber.value}`
-      ).catch((error) => {
-        console.error("Error fetching shows", error);
-      });
-      const newData = await response.json();
-      cachedData.cache = [...cachedData.cache, ...newData];
-    };
-
-    const fetchNextPage = () => {
-      pageNumber.value++;
-      fetchShows();
-    };
+    const cachedData = computed(() => showsStore.cache);
+    const genres = computed(() => showsStore.genres);
+    const filteredAndSortedShows = computed(
+      () => showsStore.filteredAndSortedShows
+    );
+    const pageNumber = computed(() => showsStore.pageNumber);
+    const getSearchFilteredList = (genre) =>
+      cachedData.value.filter(
+        (s) =>
+          s.genres.includes(genre) &&
+          s.name.toLowerCase().includes(search.value.toLowerCase())
+      );
 
     onMounted(() => {
-      fetchShows();
+      showsStore.fetchShows();
     });
 
     return {
       pageNumber,
       genres,
+      filteredAndSortedShows,
       cachedData,
-      fetchShows,
-      fetchNextPage,
       search,
+      getSearchFilteredList,
     };
   },
 });

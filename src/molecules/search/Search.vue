@@ -45,6 +45,8 @@ import {
   watch,
 } from "vue";
 import { useRoute } from "vue-router";
+
+import { useShowsStore } from "../../store/store";
 import ShowImage from '../../atoms/show-image/ShowImage.vue';
 
 export default defineComponent({
@@ -53,10 +55,10 @@ export default defineComponent({
     ShowImage
   },
   setup() {
+    const showsStore = useShowsStore();
     const route = useRoute();
     const searchQuery = ref(route.params.query || "");
     const searchResults = ref([]);
-    const pageNumber = ref(0);
 
     const responsiveOptions = ref([
       {
@@ -81,22 +83,17 @@ export default defineComponent({
       },
     ]);
 
-    const nextPage = () => {
-      pageNumber.value++;
-      search();
-    };
-
     const search = async () => {
       const response = await fetch(
-        `https://api.tvmaze.com/search/shows?q=${searchQuery.value}${
-          pageNumber.value ? `?page=${pageNumber.value}` : ""
-        }`
+        `https://api.tvmaze.com/search/shows?q=${searchQuery.value}`
       );
       searchResults.value = await response.json();
+      const transformedForStore = searchResults.value.map((result) => result.show);
+      showsStore.addToStore(transformedForStore);
     };
 
     onMounted(() => {
-      search();
+      if (searchQuery.value) search();
     });
 
     watch(searchQuery, async (newValue) => {
@@ -112,7 +109,6 @@ export default defineComponent({
       searchQuery,
       searchResults,
       search,
-      nextPage,
       responsiveOptions
     };
   },

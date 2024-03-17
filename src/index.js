@@ -12,11 +12,10 @@ import InputText from "primevue/inputtext"
 import Carousel from 'primevue/carousel';
 import Tag from 'primevue/tag';
 import Dialog from 'primevue/dialog';
+import { createPinia } from 'pinia';
 
 export const routes = [
   { path: '/', component: AppVue },
-  { path: '/genres', component: AppVue },
-  { path: '/ratings', component: AppVue },
   { path: '/show/:id', component: AppVue },
   { path: '/search/:query', component: AppVue },
 ];
@@ -27,6 +26,8 @@ const router = createRouter({
 });
 
 const app = createApp(AppVue);
+const pinia = createPinia();
+app.use(pinia);
 app.use(router);
 app.use(PrimeVue);
 app.component('Button', Button);
