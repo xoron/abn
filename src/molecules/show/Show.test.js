@@ -1,6 +1,6 @@
 import { mount, flushPromises } from '@vue/test-utils';
 import { createRouter, createWebHistory } from 'vue-router';
-import { routes } from '../../index'; // Update the import path as necessary
+import { routes } from '../../index';
 import ShowDetails from './Show.vue';
 
 // Mock fetch response
@@ -24,12 +24,12 @@ global.fetch = jest.fn(() =>
 
 jest.mock('../../atoms/render-visible/RenderVisible.vue', () => ({
   name: 'RenderVisible',
-  render: () => null, // Adjust as necessary for your testing needs
+  template: '<div><slot /></div>',
 }));
 
 jest.mock('../../atoms/show-image/ShowImage.vue', () => ({
   name: 'ShowImage',
-  render: () => null, // Adjust as necessary for your testing needs
+  template: '<div><slot /></div>',
 }));
 
 describe('ShowDetails', () => {
@@ -53,7 +53,7 @@ describe('ShowDetails', () => {
       },
     });
 
-    await flushPromises(); // Wait for any pending operations to finish
+    await flushPromises();
 
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(wrapper.vm.show.name).toContain("Mock Show");
@@ -63,7 +63,7 @@ describe('ShowDetails', () => {
 
   it('handles API fetch failures gracefully', async () => {
     fetch.mockImplementationOnce(mockFetchFailure);
-    router.push('/show/2'); // Using a different ID to simulate a new fetch
+    router.push('/show/2');
     await router.isReady();
 
     const wrapper = mount(ShowDetails, {

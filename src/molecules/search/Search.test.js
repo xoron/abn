@@ -31,7 +31,7 @@ global.fetch = jest.fn(() =>
 
 jest.mock("../../atoms/show-image/ShowImage.vue", () => ({
   name: "ShowImage",
-  render: () => null,
+  template: '<div><slot /></div>',
 }));
 
 describe("SearchView", () => {
@@ -56,60 +56,59 @@ describe("SearchView", () => {
       },
     });
 
-    await flushPromises(); // Wait for any pending operations to finish
+    await flushPromises();
 
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(wrapper.vm.searchResults).toEqual(mockSearchResults);
     expect(wrapper.vm.searchQuery).toBe(query);
   });
 
+  // TODO: fix the issues with why components are not being deep rendered
   xit("navigates to show details page on button click", async () => {
     router.push("/search/test");
     await router.isReady();
 
     const mockRoute = {
-        params: {
-          query: 'test'
-        }
-      }
+      params: {
+        query: "test",
+      },
+    };
 
     const wrapper = mount(SearchView, {
       global: {
         mocks: {
-            $route: mockRoute,
+          $route: mockRoute,
         },
         plugins: [router],
       },
     });
 
-    await flushPromises(); // Wait for fetch and Vue updates
+    await flushPromises();
+    expect(wrapper.findAll('[data-test="show-button"]').length).toBeGreaterThan(
+      0
+    );
+    await wrapper.findAll('[data-test="show-button"]')[0].trigger("click");
+    await flushPromises();
 
-    // Ensure search results are rendered
-    expect(wrapper.findAll('[data-test="show-button"]').length).toBeGreaterThan(0);
-
-    // Click the button associated with the first show
-    await wrapper.findAll('[data-test="show-button"]')[0].trigger('click');
-
-    await flushPromises(); // Wait for navigation and Vue updates
-
-    // This assumes you're using Vue Router's history mode and that the push worked
-    expect(router.currentRoute.value.path).toContain(`/show/${mockSearchResults[0].show.id}`);
+    expect(router.currentRoute.value.path).toContain(
+      `/show/${mockSearchResults[0].show.id}`
+    );
   });
 
-    xit("renders a ShowImage component for each search result", async () => {
-        router.push("/search/test");
-        await router.isReady();
-    
-        const wrapper = mount(SearchView, {
-        global: {
-            plugins: [router],
-        },
-        });
-    
-        await flushPromises(); // Wait for fetch and Vue updates
-    
-        const showImages = wrapper.findComponent({ name: "ShowImage" });
-        expect(showImages).toHaveLength(mockSearchResults.length);
+  // TODO: fix the issues with why components are not being deep rendered
+  xit("renders a ShowImage component for each search result", async () => {
+    router.push("/search/test");
+    await router.isReady();
+
+    const wrapper = mount(SearchView, {
+      global: {
+        plugins: [router],
+      },
     });
 
+    await flushPromises();
+
+    const showImages = wrapper.find('img')
+    expect(showImages).toHaveLength(mockSearchResults.length);
+  });
 });

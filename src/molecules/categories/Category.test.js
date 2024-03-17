@@ -1,16 +1,14 @@
 import { mount, flushPromises } from '@vue/test-utils';
 import CategoryView from './Category.vue';
-// import ShowImage from '../../atoms/show-image/ShowImage.vue';
-// import RenderVisible from '../../atoms/render-visible/RenderVisible.vue';
 
 jest.mock('../../atoms/show-image/ShowImage.vue', () => ({
   name: 'ShowImage',
-  render: () => null,
+  template: '<div><slot /></div>',
 }));
 
 jest.mock('../../atoms/render-visible/RenderVisible.vue', () => ({
   name: 'RenderVisible',
-    render: () => null,
+  template: '<div><slot /></div>',
 }));
 
 describe('CategoryView', () => {

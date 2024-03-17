@@ -3,6 +3,8 @@
     <InputText
       placeholder="Search ABN shows"
       :value="searchQuery"
+      data-test="search-input"
+      autofocus
       @input="searchQuery = $event.target.value"
     />
 
