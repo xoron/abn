@@ -9,7 +9,7 @@
     />
 
     <div
-      v-if="searchResults.length === 0 && searchQuery"
+      v-if="somethingWentWrong"
     >
       <TryAgain
         data-test="try-again"
@@ -53,8 +53,7 @@ import {
   defineComponent,
   onMounted,
   ref,
-  watch,
-  computed
+  watch
 } from "vue";
 import { useRoute } from "vue-router";
 
@@ -82,12 +81,7 @@ export default defineComponent({
     const route = useRoute();
     const searchQuery = ref(route.params.query || "");
     const searchResults = ref([]);
-    const loading = ref(false);
-    const somethingWentWrong = computed(() =>
-      !loading.value &&
-      searchResults.value.length === 0 &&
-      !!searchQuery.value
-    );
+    const somethingWentWrong = ref(false);
 
     const responsiveOptions = ref([
       {
@@ -113,14 +107,17 @@ export default defineComponent({
     ]);
 
     const search = async () => {
-      loading.value = true;
+      if (somethingWentWrong.value) somethingWentWrong.value = false;
       const response = await fetch(
         `https://api.tvmaze.com/search/shows?q=${searchQuery.value}`
       ).catch((error) => {
         console.warn("Error fetching shows", error);
-        loading.value = false;
+        somethingWentWrong.value = true;
       });
-      loading.value = false;
+      if (!response) {
+        somethingWentWrong.value = true;
+        return;
+      }
       searchResults.value = await response.json();
       const transformedForStore = searchResults.value.map((result) => result.show);
       showsStore.addToStore(transformedForStore);
