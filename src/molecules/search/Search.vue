@@ -8,6 +8,15 @@
       @input="searchQuery = $event.target.value"
     />
 
+    <div
+      v-if="searchResults.length === 0 && searchQuery"
+    >
+      <TryAgain
+        data-test="try-again"
+        :action="search"
+      />
+    </div>
+
     <Carousel
       v-if="searchResults.length > 0"
       :value="searchResults"
@@ -21,7 +30,7 @@
           <div class="mb-3">
             <div class="relative mx-auto">
               <Button
-                data-test="show-button"
+                class="show-button"
                 @click="
                   async () => {
                     await $router.push(`/search/${searchQuery}`);
@@ -45,22 +54,40 @@ import {
   onMounted,
   ref,
   watch,
+  computed
 } from "vue";
 import { useRoute } from "vue-router";
 
 import { useShowsStore } from "../../store/store";
 import ShowImage from '../../atoms/show-image/ShowImage.vue';
+import TryAgain from '../../atoms/try-again/TryAgain.vue';
+
+const debounce = (func, wait) => {
+  let timeout;
+  return function (...args) {
+    const context = this;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(context, args), wait);
+  };
+};
 
 export default defineComponent({
   name: "SearchView",
   components: {
-    ShowImage
+    ShowImage,
+    TryAgain
   },
   setup() {
     const showsStore = useShowsStore();
     const route = useRoute();
     const searchQuery = ref(route.params.query || "");
     const searchResults = ref([]);
+    const loading = ref(false);
+    const somethingWentWrong = computed(() =>
+      !loading.value &&
+      searchResults.value.length === 0 &&
+      !!searchQuery.value
+    );
 
     const responsiveOptions = ref([
       {
@@ -86,9 +113,14 @@ export default defineComponent({
     ]);
 
     const search = async () => {
+      loading.value = true;
       const response = await fetch(
         `https://api.tvmaze.com/search/shows?q=${searchQuery.value}`
-      );
+      ).catch((error) => {
+        console.warn("Error fetching shows", error);
+        loading.value = false;
+      });
+      loading.value = false;
       searchResults.value = await response.json();
       const transformedForStore = searchResults.value.map((result) => result.show);
       showsStore.addToStore(transformedForStore);
@@ -98,26 +130,28 @@ export default defineComponent({
       if (searchQuery.value) search();
     });
 
-    watch(searchQuery, async (newValue) => {
-      const response = await fetch(
-        `https://api.tvmaze.com/search/shows?q=${newValue}`
-      ).catch((error) => {
-        console.warn("Error fetching shows", error);
-      })
-      searchResults.value = await response.json();
+    const debouncedSearch = debounce(search, 500);
+    watch(searchQuery, () => {
+      debouncedSearch();
     });
 
     return {
       searchQuery,
       searchResults,
       search,
-      responsiveOptions
+      responsiveOptions,
+      somethingWentWrong
     };
   },
 });
 </script>
 
 <style scoped>
+.show-button {
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
 input {
   margin-bottom: 10px;
 }

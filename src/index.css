@@ -1,4 +1,7 @@
 body {
-    background-color: #004D41;
-    color: white;
+    background-color: #eaeaea;
+    color: #111;
+    font-family: Roboto,sans-serif;
+    padding: 0;
+    margin: 0;
 }

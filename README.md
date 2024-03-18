@@ -1,5 +1,19 @@
 # ABN
 
+## Project setup
+
+Requirements:
+node version: `20.11.0`
+npm version: `10.2.4`
+
+run this following commands in the terminal at the root of the project:
+```
+npm install
+npm start
+```
+
+Now it should be running at [http://localhost:8080/](http://localhost:8080/)
+
 ## Deployment
 [https://xoron.github.io/abn/#/](https://xoron.github.io/abn/#/)
 
@@ -17,9 +31,8 @@
 
 ## Needed Fixes:
 - Unit test assertion of HTML elements is not working
-- Unit testing for state management is not working
 - Code coverage is not clear for Vue components
-- Remove skipped tests
+- fix skipped tests
 
 ## Improvements:
 - Snapshot testing for components
@@ -32,7 +45,9 @@
 - Code formatter like Prettier to help keep code consistent - I did not use it because I don't think it was needed for the purpose of the project
 - TypeScript to make the code more readable and maintainable - I thought doing this in an unfamiliar ecosystem would be too much for the time I had
 - Add more show details on the details dialog
-- After some experience, i see it is important to make the code readable. `.vue` files allow flexibility, but a nice refactor for readability would be to organise segments by script, template, and style. I considered it out of scope when i realised.
+- After some experience, i see it is important to make the code readable for debugging. `.vue` files allow flexibility, but a nice refactor for readability would be to organise segments by script, template, and style. I considered it out of scope when i realised.
+- Pre-rendering images for better performance
+- Persistent storage for the search results. localStorage/indexedDB could be used to store the search results so that the user does not have to search again when they navigate back to the search page. but this is an decisions to be made based on security requirements.
 
 ## Architecture:
 - Vue - As per the requirement, I'm using Vue 3 because it is the latest version of Vue

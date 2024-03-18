@@ -54,6 +54,7 @@ export default defineComponent({
     });
 
     return {
+      route,
       isOnSearchPage,
       isOnShowDetailsPage
     };
