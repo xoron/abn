@@ -72,8 +72,6 @@ describe('ShowDetails', () => {
       },
     });
 
-    await flushPromises();
-
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(wrapper.vm.show.name).toBe(undefined);
   });

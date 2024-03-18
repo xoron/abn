@@ -83,12 +83,10 @@ describe("SearchView", () => {
       },
     });
 
-    await flushPromises();
     expect(wrapper.findAll('[data-test="show-button"]').length).toBeGreaterThan(
       0
     );
     await wrapper.findAll('[data-test="show-button"]')[0].trigger("click");
-    await flushPromises();
 
     expect(router.currentRoute.value.path).toContain(
       `/show/${mockSearchResults[0].show.id}`
@@ -105,8 +103,6 @@ describe("SearchView", () => {
         plugins: [router],
       },
     });
-
-    await flushPromises();
 
     const showImages = wrapper.find('img')
     expect(showImages).toHaveLength(mockSearchResults.length);
