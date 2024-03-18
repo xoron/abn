@@ -2,6 +2,7 @@
   <div
 v-if="list.length > 0"
 data-test="category"
+class="category-container"
 >
     <h3>{{ category }}</h3>
 
@@ -18,6 +19,7 @@ data-test="category"
             <div class="mb-3">
               <div class="relative mx-auto">
                 <Button
+                 class="show-button"
                   @click="() => $router.push(`/show/${slotProps.data?.id}`)"
                 >
                   <ShowImage :show="slotProps.data" />
@@ -128,8 +130,24 @@ h1 {
   transform: rotateY(-20deg) scale(0.9);
 }
 
-img {
-  width: 200px;
-  height: 300px;
+.show-button {
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+.category-container {
+  margin: 0 10px;
+}
+</style>
+
+<style>
+div.relative.mx-auto {
+  justify-content: center;
+  display: flex;
+}
+
+button.p-link.p-disabled {
+  visibility: hidden;
 }
 </style>

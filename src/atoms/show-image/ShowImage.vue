@@ -10,14 +10,12 @@
             />
             <Tag
                 :value="show.name"
-                class="absolute"
-                style="left: 5px; top: 5px"
+                class="absolute tag top"
                 data-testid="show-name"
             />
             <Tag
                 :value="show.rating?.average ? `⭐ ${show.rating.average}` : 'unrated'"
-                class="absolute"
-                style="bottom: 5px; left: 5px"
+                class="absolute tag bottom"
                 data-testid="show-rating"
             />
         </div>
@@ -56,8 +54,21 @@ export default {
 img {
     height: 100%;
     width: 100%;
-    border-radius: 0.5rem;
     background-image: url('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif');
     background-size: contain;
+}
+
+.tag {
+    background-color: #fff;
+    color: #111;
+    left: 5px;
+}
+
+.top {
+    top: 5px;
+}
+
+.bottom {
+    bottom: 5px;
 }
 </style>

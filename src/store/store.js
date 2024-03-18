@@ -29,9 +29,5 @@ export const useShowsStore = defineStore('shows', {
         const uncachedShows = shows.filter((show) => !this.cache.find((s) => s.id === show.id));
         this.cache = [...this.cache, ...uncachedShows];
     },
-    fetchNextPage() {
-      this.pageNumber++;
-      this.fetchShows();
-    },
   },
 });
