@@ -4,6 +4,7 @@ export const useShowsStore = defineStore('shows', {
   state: () => ({
     cache: [],
     pageNumber: 1,
+    apiError: false,
   }),
   getters: {
     genres: (state) => {
@@ -23,6 +24,7 @@ export const useShowsStore = defineStore('shows', {
         this.cache = [...this.cache, ...uncachedShows];
       } catch (error) {
         console.warn("Error fetching shows", error);
+        this.apiError = true;
       }
     },
     addToStore(shows) {

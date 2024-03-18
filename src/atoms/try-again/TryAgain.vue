@@ -1,11 +1,11 @@
 <template>
   <div>
-    <h1>Fetching TV shows...</h1>
+    <h1>Something went wrong.</h1>
     <Button
       data-test="button"
       @click="action"
     >
-      Click here to try again.
+      Click here to try again
     </Button>
   </div>
 </template>

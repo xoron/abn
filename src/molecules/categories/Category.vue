@@ -19,7 +19,7 @@ class="category-container"
             <div class="mb-3">
               <div class="relative mx-auto">
                 <Button
-                 class="show-button"
+                  class="show-button"
                   @click="() => $router.push(`/show/${slotProps.data?.id}`)"
                 >
                   <ShowImage :show="slotProps.data" />

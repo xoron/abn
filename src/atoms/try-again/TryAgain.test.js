@@ -9,7 +9,7 @@ describe('TryAgain', () => {
       },
     });
 
-    expect(wrapper.text()).toContain('Fetching TV shows...');
+    expect(wrapper.text()).toContain('Something went wrong.');
   });
 
   it('emits an event when the button is clicked', async () => {

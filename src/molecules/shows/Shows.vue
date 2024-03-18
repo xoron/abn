@@ -17,6 +17,7 @@
     <div
       v-if="genres.length === 0"
       class="centered"
+      :class="{ hidden: !apiError }"
     >
       <TryAgain
         data-test="try-again"
@@ -56,6 +57,7 @@ export default defineComponent({
     const pageNumber = computed(() => showsStore.pageNumber);
     const getSearchFilteredList = (genre) =>
       cachedData.value.filter((s) => s.genres.includes(genre));
+    const apiError = computed(() => showsStore.apiError);
 
     onMounted(() => {
       showsStore.fetchShows();
@@ -68,6 +70,7 @@ export default defineComponent({
       cachedData,
       getSearchFilteredList,
       fetchShows: showsStore.fetchShows,
+      apiError
     };
   },
 });
@@ -106,5 +109,9 @@ form {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.hidden {
+  display: none;
 }
 </style>
