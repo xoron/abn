@@ -1,4 +1,4 @@
-import { mount, flushPromises } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import { createTestingPinia } from '@pinia/testing';
 import ShowsView from './Shows.vue';
 import { useShowsStore } from '../../store/store';
@@ -40,7 +40,6 @@ describe('Shows', () => {
         plugins: [testingPinia],
       },
     });
-    await flushPromises();
 
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(wrapper.vm.genres).toEqual(expect.arrayContaining(['Comedy', 'Drama']));
@@ -52,8 +51,6 @@ describe('Shows', () => {
         plugins: [testingPinia],
       },
     });
-
-    await flushPromises();
 
     const genreComponents = wrapper.findAll('[data-test="genre"]');
     expect(genreComponents).toHaveLength(2); // Because there are 2 unique genres in the mock response.
